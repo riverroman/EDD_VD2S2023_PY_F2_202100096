@@ -4,9 +4,9 @@ type Persona struct {
 	Carnet   int
 	Nombre   string
 	Password string
-	Curso1 string
-	Curso2 string
-	Curso3 string
+	Curso1   string
+	Curso2   string
+	Curso3   string
 }
 
 type NodoHash struct {

@@ -1,0 +1,55 @@
+digraph arbol { node [shape=box];"53196152c6b09067e8e4" [dir=back];
+"53196152c6b09067e8e4" -> "a729960bba83f7b76767" [dir=back];
+"a729960bba83f7b76767" -> "d96cab3332a88ae555cd" [dir=back];
+"d96cab3332a88ae555cd" -> "4358c05361566092bc5e" [dir=back];
+"4358c05361566092bc5e" -> "28-12-2023::07:38:00
+Aceptado
+Libro1
+201700918" [dir=back];
+ "d96cab3332a88ae555cd" -> "f27aa241fadad5f765c9" [dir=back];
+"f27aa241fadad5f765c9" -> "28-12-2023::07:38:00
+Rechazado
+Libro2
+201700918" [dir=back];
+ {rank=same"4358c05361566092bc5e" -> "f27aa241fadad5f765c9" [style=invis]}; 
+"a729960bba83f7b76767" -> "472b74f08715cefeaf1a" [dir=back];
+"472b74f08715cefeaf1a" -> "2802bdf32617ca8dee39" [dir=back];
+"2802bdf32617ca8dee39" -> "28-12-2023::07:38:00
+Aceptado
+Libro3
+201700918" [dir=back];
+ "472b74f08715cefeaf1a" -> "c2496959aa2287178885" [dir=back];
+"c2496959aa2287178885" -> "28-12-2023::07:38:00
+Aceptado
+Libro4
+201700918" [dir=back];
+ {rank=same"2802bdf32617ca8dee39" -> "c2496959aa2287178885" [style=invis]}; 
+{rank=same"d96cab3332a88ae555cd" -> "472b74f08715cefeaf1a" [style=invis]}; 
+"53196152c6b09067e8e4" -> "c0ded8e7175410168e4d" [dir=back];
+"c0ded8e7175410168e4d" -> "8fa591f87ed11c8fdb41" [dir=back];
+"8fa591f87ed11c8fdb41" -> "8cf50ac62af3e2e109e0" [dir=back];
+"8cf50ac62af3e2e109e0" -> "28-12-2023::07:38:00
+Rechazado
+Libro5
+201700918" [dir=back];
+ "8fa591f87ed11c8fdb41" -> "733fdba24ca91c2ff8bb" [dir=back];
+"733fdba24ca91c2ff8bb" -> "28-12-2023::07:38:00
+Aceptado
+Libro6
+201700918" [dir=back];
+ {rank=same"8cf50ac62af3e2e109e0" -> "733fdba24ca91c2ff8bb" [style=invis]}; 
+"c0ded8e7175410168e4d" -> "860e7cf74574f58ac58c" [dir=back];
+"860e7cf74574f58ac58c" -> "3afc200131a401369417" [dir=back];
+"3afc200131a401369417" -> "28-12-2023::07:38:00
+Aceptado
+Libro7
+201700918" [dir=back];
+ "860e7cf74574f58ac58c" -> "dc6ca7acca5d24e2d8d0" [dir=back];
+"dc6ca7acca5d24e2d8d0" -> "28-12-2023::07:38:00
+Aceptado
+Libro8
+201700918" [dir=back];
+ {rank=same"3afc200131a401369417" -> "dc6ca7acca5d24e2d8d0" [style=invis]}; 
+{rank=same"8fa591f87ed11c8fdb41" -> "860e7cf74574f58ac58c" [style=invis]}; 
+{rank=same"a729960bba83f7b76767" -> "c0ded8e7175410168e4d" [style=invis]}; 
+}

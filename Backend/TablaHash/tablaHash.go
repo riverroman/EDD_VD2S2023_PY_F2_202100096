@@ -118,6 +118,43 @@ func (t *TablasHash) Insertar(carnet int, nombre string, password string, curso1
 	}
 }
 
+func (t *TablasHash) Buscar(carnet string, password string) bool {
+	valTemp, err := strconv.Atoi(carnet)
+	if err != nil {
+		return false
+	}
+	indice := t.calculIndice(valTemp)
+	if indice < t.Capacidad {
+		if usuario, existe := t.Tabla[indice]; existe {
+			if usuario.Persona.Carnet == valTemp {
+				if usuario.Persona.Password == password {
+					return true
+				}
+			} else {
+				contador := 1
+				indice = t.reCalculoIndice(valTemp, contador)
+				for {
+					if usuario, existe := t.Tabla[indice]; existe {
+						if usuario.Persona.Carnet == valTemp {
+							if usuario.Persona.Password == password {
+								return true
+							} else {
+								return false
+							}
+						} else {
+							contador++
+							indice = t.reCalculoIndice(valTemp, contador)
+						}
+					} else {
+						return false
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
 func (t *TablasHash) LeerCSV(ruta string) {
 	file, err := os.Open(ruta)
 	if err != nil {

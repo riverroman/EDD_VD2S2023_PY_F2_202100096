@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 
-body{
-    background-color: rgba(0, 0, 0, 0.5)
+body {
+    background: linear-gradient(225deg, #9fde9e 0%, #dd9ede 100%);
+    background-size: cover; 
 }

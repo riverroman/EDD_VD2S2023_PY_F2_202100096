@@ -1,28 +1,26 @@
 import { useState } from 'react'
 import {Route, Routes} from 'react-router-dom'
 import Form from './components/form'
+import Header from './components/Header'
 import "./index.css"
 
-function App() {
-  const [count, setCount] = useState(0)
-  
+function App() {  
+  const [count, setCount] = useState(0);
   return (
-    <div className='flex w-full h-screen'>
-      <div className='w-full flex items-center justify-center lg:w-1/2'>
-          <Form/>
+    <div className='flex flex-col min-h-screen'>
+      <div className='w-full p-3 flex items-center justify-center bg-slate-800 text-white'>
+        <Header/>
       </div>
-      <div className='hidden relative lg:flex h-full w-1/2 items-center justify-center bg-amber-50'>
-        <div className='flex justify-center items-center bg-slate-400 rounded-3xl absolute w-1/2 h-1/4'>
-              <img className='h-40 p-2' src="https://seeklogo.com/images/U/universidad-de-san-carlos-de-guatemala-logo-4B7C23A157-seeklogo.com.png" alt="usac" />
-        <div className='font-mono text-lg font-bold text-white' >
-              <h2>River Anderson Ismalej Roman</h2>
-              <h2>202100096</h2>
-              <h2>Estructura De Datos</h2>
-        </div>
-        </div>  
+      <div className='flex-1 flex items-center justify-center'>
+        <Form/>
+      </div>
+      <div className='w-full p-3 flex items-center justify-center bg-slate-800 text-white'>
+        <footer>
+          <h2 className='font-mono text-1xl'>&copy; River Roman - 2023</h2>
+        </footer>
       </div>
     </div>
-  )
+  );
 }
 
 export default App
