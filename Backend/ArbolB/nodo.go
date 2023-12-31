@@ -1,7 +1,14 @@
 package arbolb
 
+type Tutores struct {
+	Carnet   int
+	Nombre   string
+	Curso    string
+	Password string
+}
+
 type NodoB struct {
-	Valor     int
+	Valor     *Tutores
 	Siguiente *NodoB
 	Anterior  *NodoB
 	Izquierdo *RamaB

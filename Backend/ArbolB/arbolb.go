@@ -23,7 +23,7 @@ func (a *ArbolB) insertar_rama(nodo *NodoB, rama *RamaB) *NodoB {
 		for temp != nil {
 			if nodo.Valor == temp.Valor {
 				return nil
-			} else if nodo.Valor < temp.Valor {
+			} else if nodo.Valor.Curso < temp.Valor.Curso {
 				obj := a.insertar_rama(nodo, temp.Izquierdo)
 				if obj != nil {
 					rama.Insertar(obj)
@@ -49,7 +49,8 @@ func (a *ArbolB) insertar_rama(nodo *NodoB, rama *RamaB) *NodoB {
 }
 
 func (a *ArbolB) dividir(rama *RamaB) *NodoB {
-	val := &NodoB{Valor: -9999}
+	tutor := &Tutores{Carnet: 0, Nombre: "", Curso: "", Password: ""}
+	val := &NodoB{Valor: tutor}
 	aux := rama.Primero
 	rderecha := &RamaB{Primero: nil, Contador: 0, Hoja: true}
 	rizquierda := &RamaB{Primero: nil, Contador: 0, Hoja: true}
@@ -86,8 +87,9 @@ func (a *ArbolB) dividir(rama *RamaB) *NodoB {
 	return nuevo
 }
 
-func (a *ArbolB) Insertar(valor int) {
-	nuevoNodo := &NodoB{Valor: valor}
+func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password string) {
+	tutor := &Tutores{Carnet: carnet, Nombre: nombre, Curso: curso, Password: password}
+	nuevoNodo := &NodoB{Valor: tutor}
 	if a.Raiz == nil {
 		a.Raiz = &RamaB{Primero: nil, Hoja: true, Contador: 0}
 		a.Raiz.Insertar(nuevoNodo)
@@ -140,7 +142,7 @@ func (a *ArbolB) grafoRamas(rama *NodoB) string {
 	dot := ""
 	if rama != nil {
 		aux := rama
-		dot = dot + "R" + strconv.Itoa(rama.Valor) + "[label=\""
+		dot = dot + "R" + rama.Valor.Curso + "[label=\""
 		r := 1
 		for aux != nil {
 			if aux.Izquierdo != nil {
@@ -148,9 +150,9 @@ func (a *ArbolB) grafoRamas(rama *NodoB) string {
 				r++
 			}
 			if aux.Siguiente != nil {
-				dot = dot + strconv.Itoa(aux.Valor) + "|"
+				dot = dot + aux.Valor.Curso + "|"
 			} else {
-				dot = dot + strconv.Itoa(aux.Valor)
+				dot = dot + aux.Valor.Curso
 				if aux.Derecho != nil {
 					dot = dot + "|<C" + strconv.Itoa(r) + ">"
 				}
@@ -166,17 +168,17 @@ func (a *ArbolB) conexionRamas(rama *NodoB) string {
 	dot := ""
 	if rama != nil {
 		aux := rama
-		actual := "R" + strconv.Itoa(rama.Valor)
+		actual := "R" + rama.Valor.Curso
 		r := 1
 		for aux != nil {
 			if aux.Izquierdo != nil {
-				dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + strconv.Itoa(aux.Izquierdo.Primero.Valor) + ";\n"
+				dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + aux.Izquierdo.Primero.Valor.Curso + ";\n"
 				r++
 				dot += a.conexionRamas(aux.Izquierdo.Primero)
 			}
 			if aux.Siguiente == nil {
 				if aux.Derecho != nil {
-					dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + strconv.Itoa(aux.Derecho.Primero.Valor) + ";\n"
+					dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + aux.Derecho.Primero.Valor.Curso + ";\n"
 					r++
 					dot += a.conexionRamas(aux.Derecho.Primero)
 				}
@@ -187,34 +189,32 @@ func (a *ArbolB) conexionRamas(rama *NodoB) string {
 	return dot
 }
 
-func (a *ArbolB) Buscar(numero int) {
-	buscarElemento := a.buscarArbol(a.Raiz.Primero, numero)
-	if buscarElemento != nil {
-		fmt.Println("Se encontro el elemento", buscarElemento)
+func (a *ArbolB) Buscar(numero string, listaSimple *ListaSimple) {
+	valTemp, _ := strconv.Atoi(numero)
+	a.buscarArbol(a.Raiz.Primero, valTemp, listaSimple)
+	if listaSimple.Longitud > 0 {
+		fmt.Println("Se enconto el elemento: ", listaSimple.Longitud)
 	} else {
 		fmt.Println("No se encontro")
 	}
 }
 
-func (a *ArbolB) buscarArbol(raiz *NodoB, numero int) *NodoB {
-	var valorEncontrado *NodoB
+func (a *ArbolB) buscarArbol(raiz *NodoB, numero int, listaSimple *ListaSimple) {
 	if raiz != nil {
 		aux := raiz
 		for aux != nil {
 			if aux.Izquierdo != nil {
-				valorEncontrado = a.buscarArbol(aux.Izquierdo.Primero, numero)
+				a.buscarArbol(aux.Izquierdo.Primero, numero, listaSimple)
 			}
-			if aux.Valor == numero {
-				fmt.Println("Se enconto el valor: ", numero)
-				valorEncontrado = aux
+			if aux.Valor.Carnet == numero {
+				listaSimple.Insertar(aux)
 			}
 			if aux.Siguiente == nil {
 				if aux.Derecho != nil {
-					valorEncontrado = a.buscarArbol(aux.Derecho.Primero, numero)
+					a.buscarArbol(aux.Derecho.Primero, numero, listaSimple)
 				}
 			}
 			aux = aux.Siguiente
 		}
 	}
-	return valorEncontrado
 }

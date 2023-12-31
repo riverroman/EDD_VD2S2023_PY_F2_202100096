@@ -11,14 +11,14 @@ func (r *RamaB) Insertar(nuevoNodo *NodoB) {
 		r.Primero = nuevoNodo
 		r.Contador += 1
 	} else {
-		if nuevoNodo.Valor < r.Primero.Valor {
+		if nuevoNodo.Valor.Curso < r.Primero.Valor.Curso {
 			nuevoNodo.Siguiente = r.Primero
 			r.Primero.Izquierdo = nuevoNodo.Derecho
 			r.Primero.Anterior = nuevoNodo
 			r.Primero = nuevoNodo
 			r.Contador += 1
 		} else if r.Primero.Siguiente != nil {
-			if r.Primero.Siguiente.Valor > nuevoNodo.Valor {
+			if r.Primero.Siguiente.Valor.Curso > nuevoNodo.Valor.Curso {
 				nuevoNodo.Siguiente = r.Primero.Siguiente
 				nuevoNodo.Anterior = r.Primero
 				r.Primero.Siguiente.Izquierdo = nuevoNodo.Derecho

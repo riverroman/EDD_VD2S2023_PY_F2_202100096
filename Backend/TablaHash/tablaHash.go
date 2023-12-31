@@ -14,7 +14,7 @@ type TablasHash struct {
 	Utilizacion int
 }
 
-func (t *TablasHash) calculIndice(carnet int) int {
+func (t *TablasHash) calculoIndice(carnet int) int {
 	var numeros []int
 
 	for {
@@ -76,7 +76,7 @@ func (t *TablasHash) reInsertar(capacidadAnterior int) {
 }
 
 func (t *TablasHash) reCalculoIndice(carnet int, contador int) int {
-	nuevoIndice := t.calculIndice(carnet) + (contador * contador)
+	nuevoIndice := t.calculoIndice(carnet) + (contador * contador)
 	return t.nuevoIndice(nuevoIndice)
 }
 
@@ -92,7 +92,7 @@ func (t *TablasHash) nuevoIndice(nuevoIndice int) int {
 }
 
 func (t *TablasHash) Insertar(carnet int, nombre string, password string, curso1 string, curso2 string, curso3 string) {
-	indice := t.calculIndice(carnet)
+	indice := t.calculoIndice(carnet)
 	nuevoNodo := &NodoHash{Llave: indice, Persona: &Persona{Carnet: carnet, Nombre: nombre, Password: password, Curso1: curso1, Curso2: curso2, Curso3: curso3}}
 	if indice < t.Capacidad {
 		if _, existe := t.Tabla[indice]; !existe {
@@ -123,7 +123,7 @@ func (t *TablasHash) Buscar(carnet string, password string) bool {
 	if err != nil {
 		return false
 	}
-	indice := t.calculIndice(valTemp)
+	indice := t.calculoIndice(valTemp)
 	if indice < t.Capacidad {
 		if usuario, existe := t.Tabla[indice]; existe {
 			if usuario.Persona.Carnet == valTemp {
@@ -182,4 +182,16 @@ func (t *TablasHash) LeerCSV(ruta string) {
 		valor, _ := strconv.Atoi(linea[0])
 		t.Insertar(valor, linea[1], linea[2], linea[3], linea[4], linea[5])
 	}
+}
+
+func (t *TablasHash) convertirArreglo() []NodoHash {
+	var arrays []NodoHash
+	if t.Utilizacion > 0 {
+		for i := 0; i < t.Capacidad; i++ {
+			if usuario, existe := t.Tabla[i]; existe {
+				arrays = append(arrays, usuario)
+			}
+		}
+	}
+	return arrays
 }
