@@ -132,6 +132,7 @@ func (t *TablasHash) Buscar(carnet string, password string) bool {
 				}
 			} else {
 				contador := 1
+
 				indice = t.reCalculoIndice(valTemp, contador)
 				for {
 					if usuario, existe := t.Tabla[indice]; existe {
@@ -184,7 +185,7 @@ func (t *TablasHash) LeerCSV(ruta string) {
 	}
 }
 
-func (t *TablasHash) convertirArreglo() []NodoHash {
+func (t *TablasHash) ConvertirArreglo() []NodoHash {
 	var arrays []NodoHash
 	if t.Utilizacion > 0 {
 		for i := 0; i < t.Capacidad; i++ {

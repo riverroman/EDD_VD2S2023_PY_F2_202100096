@@ -4,12 +4,25 @@ import { useState } from "react";
 import swal from "sweetalert";
 import { useNavigate } from 'react-router-dom';
 
+
 export default function Login() {
   const [isChecked, setIsChecked] = useState(false);
   const [isStudentChecked, setIsStudentChecked] = useState(false);
   const [userName, setUserName] = useState("");
   const [passwordUser, setPasswordUser] = useState("");
   const navigate = useNavigate(); 
+
+  const handleTutorCheckboxChange = () => {
+    setIsChecked(true);
+    setIsStudentChecked(false);
+  }
+
+  const handleStudentCheckboxChange = () => {
+    setIsStudentChecked(true);
+    setIsChecked(false);
+  };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +36,7 @@ export default function Login() {
         UserName: userName,
         Password: passwordUser,
         Tutor: isChecked,
-        Estudiante: isStudentChecked,
+        Alumno: isStudentChecked,
       }),
     });
 
@@ -48,12 +61,31 @@ export default function Login() {
       localStorage.setItem("user", userName);
       navigate('/admin');
     } else if (result.rol === 2) {
-      alert("Inicio de Sesion Tutor");
+      swal({
+        title : "Credenciales Correctas",
+        text : "Datos Correctos",
+        icon : "success",
+        button : "Aceptar",
+        timer : "3000",
+      })
+      localStorage.setItem("Tipo", "2");
+      localStorage.setItem("User", userName);
+      navigate('/tutor');
     } else if (result.rol === 3) {
-      alert("Inicio de Sesion Estudiante");
+      swal({
+        title : "Credenciales Correctas",
+        text : "Datos Correctos",
+        icon : "success",
+        button : "Aceptar",
+        timer : "3000",
+      })
+      localStorage.setItem("Tipo", "3");
+      localStorage.setItem("User", userName);
+      navigate('/estudiante');
+      console.log(result);
     }
   };
-
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <div className="w-full bg-white flex items-center justify-center gap-2 py-3 text-black">
@@ -107,7 +139,7 @@ export default function Login() {
                     type="checkbox"
                     id="tutor"
                     checked={isChecked}
-                    onChange={() => setIsChecked(!isChecked)}
+                    onChange={handleTutorCheckboxChange}
                   />
                   <label
                     className="font-medium text-base font-mono"
@@ -119,7 +151,7 @@ export default function Login() {
                     type="checkbox"
                     id="estudiante"
                     checked={isStudentChecked}
-                    onChange={() => setIsStudentChecked(!isStudentChecked)}
+                    onChange={handleStudentCheckboxChange}
                   />
                   <label
                     className="font-medium text-base font-mono"
