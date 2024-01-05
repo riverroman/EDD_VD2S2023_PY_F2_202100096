@@ -31,7 +31,7 @@
 * Al iniciar sesión como administrador tendremos diferentes acciones por hacer cargar archivos de entradas, generar reportes gráficos y tener control sobre aceptar o rechazar Libros.
 
 <p align="center">
-    <img src="/Backend/Documentacion/admin.png">
+    <img src="/Backend/Documentacion/imagenes/admin.png">
 </p>
 
 ---
