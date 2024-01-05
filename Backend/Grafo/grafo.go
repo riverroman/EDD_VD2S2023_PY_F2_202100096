@@ -1,46 +1,9 @@
 package grafo
 
-import (
-	"encoding/json"
-	"log"
-	"os"
-)
+import "paquete/Backend/Peticiones"
 
 type Grafo struct {
 	Principal *NodoListaAdyacencia
-}
-
-var matriz = &Grafo{Principal: nil}
-
-type Cursos struct {
-	Codigo        string   `json:"Codigo"`
-	PostRequisito []string `json:"Post"`
-}
-
-type DatosCursos struct {
-	Curso []Cursos `json:"Cursos"`
-}
-
-func (g *Grafo) LeerJson(ruta string) {
-	data, err := os.ReadFile(ruta)
-	if err != nil {
-		log.Fatal("Error al leer el archivo: ", err)
-	}
-	var datos DatosCursos
-	err = json.Unmarshal(data, &datos)
-	if err != nil {
-		log.Fatal("Error al asignar el json: ", err)
-	}
-	for _, curso := range datos.Curso {
-		if len(curso.PostRequisito) > 0 {
-			for j := 0; j < len(curso.PostRequisito); j++ {
-				matriz.InsertarValores(curso.Codigo, curso.PostRequisito[j])
-			}
-		} else {
-			matriz.InsertarValores("ECYS", curso.Codigo)
-		}
-	}
-	matriz.Grafica()
 }
 
 func (g *Grafo) insertarColumna(curso string, post string) {
@@ -88,26 +51,28 @@ func (g *Grafo) insertarFila(curso string) {
 
 func (g *Grafo) InsertarValores(curso string, post string) {
 	if g.Principal == nil {
+		//insertar Fila
 		g.insertarFila(curso)
+		//insertar Columna
 		g.insertarColumna(curso, post)
 	} else {
 		g.insertarColumna(curso, post)
 	}
 }
 
-func (g *Grafo) Grafica() {
+func (g *Grafo) Reporte(nombre string) {
 	cadena := ""
-	nombre_archivo := "./Reportes/Grafo.dot"
-	nombre_imagen := "./Reportes/Grafo.jpg"
+	nombre_archivo := "./Reporte/" + nombre + ".dot"
+	nombre_imagen := "./Reporte/" + nombre + ".jpg"
 	if g.Principal != nil {
 		cadena += "digraph grafoDirigido{ \n rankdir=LR; \n node [shape=box]; layout=neato; \n nodo" + g.Principal.Valor + "[label=\"" + g.Principal.Valor + "\"]; \n"
 		cadena += "node [shape = ellipse]; \n"
 		cadena += g.retornarValoresMatriz()
 		cadena += "\n}"
 	}
-	crearArchivo(nombre_archivo)
-	escribirArchivo(cadena, nombre_archivo)
-	ejecutar(nombre_imagen, nombre_archivo)
+	Peticiones.CrearArchivo(nombre_archivo)
+	Peticiones.EscribirArchivo(cadena, nombre_archivo)
+	Peticiones.Ejecutar(nombre_imagen, nombre_archivo)
 }
 
 func (g *Grafo) retornarValoresMatriz() string {

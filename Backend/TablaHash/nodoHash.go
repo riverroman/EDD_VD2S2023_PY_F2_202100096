@@ -1,12 +1,10 @@
-package tablahash
+package tablaHash
 
 type Persona struct {
 	Carnet   int
 	Nombre   string
 	Password string
-	Curso1   string
-	Curso2   string
-	Curso3   string
+	Cursos   []string
 }
 
 type NodoHash struct {

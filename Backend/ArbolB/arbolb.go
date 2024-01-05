@@ -1,7 +1,8 @@
-package arbolb
+package arbolB
 
 import (
 	"fmt"
+	"paquete/Backend/Peticiones"
 	"strconv"
 )
 
@@ -21,7 +22,7 @@ func (a *ArbolB) insertar_rama(nodo *NodoB, rama *RamaB) *NodoB {
 	} else {
 		temp := rama.Primero
 		for temp != nil {
-			if nodo.Valor == temp.Valor {
+			if nodo.Valor.Curso == temp.Valor.Curso {
 				return nil
 			} else if nodo.Valor.Curso < temp.Valor.Curso {
 				obj := a.insertar_rama(nodo, temp.Izquierdo)
@@ -83,11 +84,10 @@ func (a *ArbolB) dividir(rama *RamaB) *NodoB {
 	nuevo := &NodoB{Valor: val.Valor}
 	nuevo.Derecho = rderecha
 	nuevo.Izquierdo = rizquierda
-
 	return nuevo
 }
 
-func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password string) {
+func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password string) { //15
 	tutor := &Tutores{Carnet: carnet, Nombre: nombre, Curso: curso, Password: password}
 	nuevoNodo := &NodoB{Valor: tutor}
 	if a.Raiz == nil {
@@ -103,19 +103,19 @@ func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password stri
 	}
 }
 
-func (a *ArbolB) Graficar() {
+func (a *ArbolB) Graficar(nombre string) {
 	cadena := ""
-	nombre_archivo := "./Reportes/" + "ArbolB" + ".dot"
-	nombre_imagen := "./Reportes/ArbolB" + ".jpg"
+	nombre_archivo := "./Reporte/" + nombre + ".dot"
+	nombre_imagen := "./Reporte/" + nombre + ".jpg"
 	if a.Raiz != nil {
 		cadena += "digraph arbol { \nnode[shape=record]\n"
 		cadena += a.grafo(a.Raiz.Primero)
 		cadena += a.conexionRamas(a.Raiz.Primero)
 		cadena += "}"
 	}
-	crearArchivo(nombre_archivo)
-	escribirArchivo(cadena, nombre_archivo)
-	ejecutar(nombre_imagen, nombre_archivo)
+	Peticiones.CrearArchivo(nombre_archivo)
+	Peticiones.EscribirArchivo(cadena, nombre_archivo)
+	Peticiones.Ejecutar(nombre_imagen, nombre_archivo)
 }
 
 func (a *ArbolB) grafo(rama *NodoB) string {
@@ -193,7 +193,7 @@ func (a *ArbolB) Buscar(numero string, listaSimple *ListaSimple) {
 	valTemp, _ := strconv.Atoi(numero)
 	a.buscarArbol(a.Raiz.Primero, valTemp, listaSimple)
 	if listaSimple.Longitud > 0 {
-		fmt.Println("Se enconto el elemento: ", listaSimple.Longitud)
+		fmt.Println("Se encontro el elemento", listaSimple.Longitud)
 	} else {
 		fmt.Println("No se encontro")
 	}
@@ -212,6 +212,96 @@ func (a *ArbolB) buscarArbol(raiz *NodoB, numero int, listaSimple *ListaSimple) 
 			if aux.Siguiente == nil {
 				if aux.Derecho != nil {
 					a.buscarArbol(aux.Derecho.Primero, numero, listaSimple)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func (a *ArbolB) GuardarLibro(raiz *NodoB, nombre string, contenido string, carnet int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.GuardarLibro(aux.Izquierdo.Primero, nombre, contenido, carnet)
+			}
+			if aux.Valor.Carnet == carnet {
+				raiz.Valor.Libros = append(raiz.Valor.Libros, &Libro{Nombre: nombre, Contenido: contenido, Estado: 1, Curso: raiz.Valor.Curso, Tutor: raiz.Valor.Carnet})
+				fmt.Println("Registre el libro")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.GuardarLibro(aux.Derecho.Primero, nombre, contenido, carnet)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func (a *ArbolB) GuardarPublicacion(raiz *NodoB, contenido string, carnet int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.GuardarPublicacion(aux.Izquierdo.Primero, contenido, carnet)
+			}
+			if aux.Valor.Carnet == carnet {
+				raiz.Valor.Publicaciones = append(raiz.Valor.Publicaciones, &Publicacion{Contenido: contenido, Curso: raiz.Valor.Curso})
+				fmt.Println("Registre publicacion")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.GuardarPublicacion(aux.Derecho.Primero, contenido, carnet)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func (a *ArbolB) VerLibroAdmin(raiz *NodoB, listaSimple *ListaSimple) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.VerLibroAdmin(aux.Izquierdo.Primero, listaSimple)
+			}
+			if len(aux.Valor.Libros) > 0 {
+				listaSimple.Insertar(aux)
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.VerLibroAdmin(aux.Derecho.Primero, listaSimple)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func (a *ArbolB) ActualizarLibro(raiz *NodoB, nombre string, curso string, tipo int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.ActualizarLibro(aux.Izquierdo.Primero, nombre, curso, tipo)
+			}
+			if aux.Valor.Curso == curso {
+				for i := 0; i < len(aux.Valor.Libros); i++ {
+					if aux.Valor.Libros[i].Nombre == nombre {
+						aux.Valor.Libros[i].Estado = tipo
+					}
+				}
+				fmt.Println("Actualizado libro")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.ActualizarLibro(aux.Derecho.Primero, nombre, curso, tipo)
 				}
 			}
 			aux = aux.Siguiente

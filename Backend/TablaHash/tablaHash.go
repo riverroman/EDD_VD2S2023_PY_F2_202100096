@@ -1,22 +1,15 @@
-package tablahash
+package tablaHash
 
-import (
-	"encoding/csv"
-	"fmt"
-	"io"
-	"os"
-	"strconv"
-)
+import "strconv"
 
-type TablasHash struct {
+type TablaHash struct {
 	Tabla       map[int]NodoHash
 	Capacidad   int
 	Utilizacion int
 }
 
-func (t *TablasHash) calculoIndice(carnet int) int {
+func (t *TablaHash) calculoIndice(carnet int) int {
 	var numeros []int
-
 	for {
 		if carnet > 0 {
 			digito := carnet % 10
@@ -26,8 +19,8 @@ func (t *TablasHash) calculoIndice(carnet int) int {
 			break
 		}
 	}
-	var numeros_ascii []rune
 
+	var numeros_ascii []rune
 	for _, numero := range numeros {
 		valor := rune(numero + 48)
 		numeros_ascii = append(numeros_ascii, valor)
@@ -42,7 +35,7 @@ func (t *TablasHash) calculoIndice(carnet int) int {
 	return indice
 }
 
-func (t *TablasHash) capacidadTabla() {
+func (t *TablaHash) capacidadTabla() {
 	auxCap := float64(t.Capacidad) * 0.6
 	if t.Utilizacion > int(auxCap) {
 		auxAnterior := t.Capacidad
@@ -51,12 +44,11 @@ func (t *TablasHash) capacidadTabla() {
 		t.reInsertar(auxAnterior)
 	}
 }
-
-func (t *TablasHash) nuevaCapacidad() int {
+func (t *TablaHash) nuevaCapacidad() int {
 	contador := 0
 	a, b := 0, 1
-	for contador < 50 {
-		contador += 1
+	for contador < 100 {
+		contador++
 		if a > t.Capacidad {
 			return a
 		}
@@ -65,22 +57,22 @@ func (t *TablasHash) nuevaCapacidad() int {
 	return a
 }
 
-func (t *TablasHash) reInsertar(capacidadAnterior int) {
+func (t *TablaHash) reInsertar(capacidadAnterior int) {
 	auxTabla := t.Tabla
 	t.Tabla = make(map[int]NodoHash)
 	for i := 0; i < capacidadAnterior; i++ {
 		if usuario, existe := auxTabla[i]; existe {
-			t.Insertar(usuario.Persona.Carnet, usuario.Persona.Nombre, usuario.Persona.Password, usuario.Persona.Curso1, usuario.Persona.Curso2, usuario.Persona.Curso3)
+			t.Insertar(usuario.Persona.Carnet, usuario.Persona.Nombre, usuario.Persona.Password, usuario.Persona.Cursos)
 		}
 	}
 }
 
-func (t *TablasHash) reCalculoIndice(carnet int, contador int) int {
-	nuevoIndice := t.calculoIndice(carnet) + (contador * contador)
+func (t *TablaHash) reCalculoIndice(carnet int, contador int) int {
+	nuevoIndice := t.calculoIndice(carnet) + (contador * contador) 
 	return t.nuevoIndice(nuevoIndice)
 }
 
-func (t *TablasHash) nuevoIndice(nuevoIndice int) int {
+func (t *TablaHash) nuevoIndice(nuevoIndice int) int {
 	nuevoPosicion := 0
 	if nuevoIndice < t.Capacidad {
 		nuevoPosicion = nuevoIndice
@@ -91,13 +83,13 @@ func (t *TablasHash) nuevoIndice(nuevoIndice int) int {
 	return nuevoPosicion
 }
 
-func (t *TablasHash) Insertar(carnet int, nombre string, password string, curso1 string, curso2 string, curso3 string) {
+func (t *TablaHash) Insertar(carnet int, nombre string, password string, cursos []string) { 
 	indice := t.calculoIndice(carnet)
-	nuevoNodo := &NodoHash{Llave: indice, Persona: &Persona{Carnet: carnet, Nombre: nombre, Password: password, Curso1: curso1, Curso2: curso2, Curso3: curso3}}
+	nuevoNodo := &NodoHash{Llave: indice, Persona: &Persona{Carnet: carnet, Nombre: nombre, Password: password, Cursos: cursos}}
 	if indice < t.Capacidad {
 		if _, existe := t.Tabla[indice]; !existe {
 			t.Tabla[indice] = *nuevoNodo
-			t.Utilizacion += 1
+			t.Utilizacion++
 			t.capacidadTabla()
 		} else {
 			contador := 1
@@ -109,7 +101,7 @@ func (t *TablasHash) Insertar(carnet int, nombre string, password string, curso1
 				} else {
 					nuevoNodo.Llave = indice
 					t.Tabla[indice] = *nuevoNodo
-					t.Utilizacion += 1
+					t.Utilizacion++
 					t.capacidadTabla()
 					break
 				}
@@ -118,7 +110,7 @@ func (t *TablasHash) Insertar(carnet int, nombre string, password string, curso1
 	}
 }
 
-func (t *TablasHash) Buscar(carnet string, password string) bool {
+func (t *TablaHash) Buscar(carnet string, password string) bool {
 	valTemp, err := strconv.Atoi(carnet)
 	if err != nil {
 		return false
@@ -132,7 +124,6 @@ func (t *TablasHash) Buscar(carnet string, password string) bool {
 				}
 			} else {
 				contador := 1
-
 				indice = t.reCalculoIndice(valTemp, contador)
 				for {
 					if usuario, existe := t.Tabla[indice]; existe {
@@ -156,36 +147,7 @@ func (t *TablasHash) Buscar(carnet string, password string) bool {
 	return false
 }
 
-func (t *TablasHash) LeerCSV(ruta string) {
-	file, err := os.Open(ruta)
-	if err != nil {
-		fmt.Println("No pude abrir el archivo")
-		return
-	}
-	defer file.Close()
-
-	lectura := csv.NewReader(file)
-	lectura.Comma = ','
-	encabezado := true
-	for {
-		linea, err := lectura.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			fmt.Println("No pude leer la linea del csv")
-			continue
-		}
-		if encabezado {
-			encabezado = false
-			continue
-		}
-		valor, _ := strconv.Atoi(linea[0])
-		t.Insertar(valor, linea[1], linea[2], linea[3], linea[4], linea[5])
-	}
-}
-
-func (t *TablasHash) ConvertirArreglo() []NodoHash {
+func (t *TablaHash) ConvertirArreglo() []NodoHash {
 	var arrays []NodoHash
 	if t.Utilizacion > 0 {
 		for i := 0; i < t.Capacidad; i++ {
@@ -195,4 +157,35 @@ func (t *TablasHash) ConvertirArreglo() []NodoHash {
 		}
 	}
 	return arrays
+}
+
+func (t *TablaHash) BuscarSesion(carnet string) *Persona {
+	valTemp, err := strconv.Atoi(carnet)
+	if err != nil {
+		return nil
+	}
+	indice := t.calculoIndice(valTemp)
+	if indice < t.Capacidad {
+		if usuario, existe := t.Tabla[indice]; existe {
+			if usuario.Persona.Carnet == valTemp {
+				return usuario.Persona
+			} else {
+				contador := 1
+				indice = t.reCalculoIndice(valTemp, contador)
+				for {
+					if usuario, existe := t.Tabla[indice]; existe {
+						if usuario.Persona.Carnet == valTemp {
+							return usuario.Persona
+						} else {
+							contador++
+							indice = t.reCalculoIndice(valTemp, contador)
+						}
+					} else {
+						return nil
+					}
+				}
+			}
+		}
+	}
+	return nil
 }

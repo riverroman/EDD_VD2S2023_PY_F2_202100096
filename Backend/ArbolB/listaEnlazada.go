@@ -1,4 +1,4 @@
-package arbolb
+package arbolB
 
 type NodoLista struct {
 	Tutor     *NodoB

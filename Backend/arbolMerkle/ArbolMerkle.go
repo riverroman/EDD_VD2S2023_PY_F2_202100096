@@ -1,8 +1,9 @@
-package arbolmerk
+package arbolMerkle
 
 import (
 	"encoding/hex"
 	"math"
+	"paquete/Backend/Peticiones"
 	"strconv"
 	"time"
 
@@ -100,9 +101,9 @@ func (a *ArbolMerkle) Graficar() {
 		cadena += a.retornarValoresArbol(a.RaizMerkle, 0)
 		cadena += "}"
 	}
-	crearArchivo(nombre_archivo)
-	escribirArchivo(cadena, nombre_archivo)
-	ejecutar(nombre_imagen, nombre_archivo)
+	Peticiones.CrearArchivo(nombre_archivo)
+	Peticiones.EscribirArchivo(cadena, nombre_archivo)
+	Peticiones.Ejecutar(nombre_imagen, nombre_archivo)
 }
 
 func (a *ArbolMerkle) retornarValoresArbol(raiz *NodoMerkle, indice int) string {
