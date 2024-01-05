@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-function TablaAlumnos() {
-  const [alumnosRegistrados, setAlumnosRegistrados] = useState([]);
-
+function Tabla_Alumnos() {
+  const [alumnosRegistrados, SetAlumnosRegistrados] = useState([]);
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch("http://localhost:4000/tbl-alumnos");
-        const result = await response.json();
-        setAlumnosRegistrados(result.Arreglo);
-      } catch (error) {
-        console.error("Error al obtener datos:", error);
-      }
+    async function peticion() {
+      const response = await fetch("http://localhost:4000/tabla-alumnos");
+      const result = await response.json();
+      SetAlumnosRegistrados(result.Arreglo);
     }
-
-    fetchData();
+    peticion();
   }, []);
+
+  const salir = (e) => {
+    e.preventDefault();
+    console.log("Listo");
+    window.open("/principal/admin", "_self");
+  };
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-gray-100">
@@ -69,15 +69,18 @@ function TablaAlumnos() {
                     <td className="p-2">{element.Persona.Carnet}</td>
                     <td className="p-2">{element.Persona.Nombre}</td>
                     <td className="p-2">{element.Persona.Password}</td>
-                    <td className="p-2">{element.Persona.Curso1}</td>
-                    <td className="p-2">{element.Persona.Curso2}</td>
-                    <td className="p-2">{element.Persona.Curso3}</td>
+                    <td className="p-2">{element.Persona.Cursos[0]}</td>
+                    <td className="p-2">{element.Persona.Cursos[1]}</td>
+                    <td className="p-2">{element.Persona.Cursos[2]}</td>
                   </tr>
                 );
               }
             })}
           </tbody>
         </table>
+      </div>
+      <div className="w-full bg-slate-500 flex items-center justify-center p-2 font-mono">
+        <a href="/principal/admin" className="text-xl">← Salir</a>
       </div>
       <div className="w-full p-3 flex items-center justify-center bg-black text-white">
         <footer>
@@ -88,4 +91,4 @@ function TablaAlumnos() {
   );
 }
 
-export default TablaAlumnos;
+export default Tabla_Alumnos;

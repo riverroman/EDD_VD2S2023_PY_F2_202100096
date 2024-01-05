@@ -23,7 +23,7 @@
 * Al iniciar el programa, contaremos con un login para iniciar sesión como Administrador, Estudiante o como Tutor.
 
 <p align="center">
-    <img src="./imagenes/login.png">
+    <img src="./Backend/Documentacion/imagenes/login.png">
 </p>
 
 ---
@@ -31,7 +31,7 @@
 * Al iniciar sesión como administrador tendremos diferentes acciones por hacer cargar archivos de entradas, generar reportes gráficos y tener control sobre aceptar o rechazar Libros.
 
 <p align="center">
-    <img src="./imagenes/admin.png">
+    <img src="/Backend/Documentacion/admin.png">
 </p>
 
 ---
@@ -40,7 +40,7 @@
 * Tendremos la opcion de cargar nuestros archivos para poder realizar diferentes solicitudes.
 
 <p align="center">
-    <img src="./imagenes/zonacarga.png">
+    <img src="/Backend/Documentacion/imagenes/zonacarga.png">
 </p>
 
 
@@ -54,7 +54,7 @@
 * Luego de cargar los tutores, contaremos con una opción para poder generar nuestros Reportes Gráficos.
 
 <p align="center">
-    <img src="./imagenes/zonareportes.png">
+    <img src="./Backend/Documentacion/imagenes/zonareportes.png">
 </p>
 
 ---
@@ -64,7 +64,7 @@
 * En el Área de Estudiantes vamos a poder visualizar nuestros cursos asignados ademas de poder ver si algun tutor ha realizado una publicacion o ha posteado algun libro.
 
 <p align="center">
-    <img src="./imagenes/estudiantes.png">
+    <img src="./Backend/Documentacion/imagenes/estudiantes.png">
 </p>
 
 >### **Tutores**
@@ -73,7 +73,7 @@
 **Publicacion de Libros**
 
 <p align="center">
-    <img src="./imagenes/tutor.png">
+    <img src="./Backend/Documentacion/imagenes/tutor.png">
 </p>
 
 ---
@@ -82,7 +82,7 @@
 * En el apartado de Publicaciones podemos realizar un post para que los estudiantes logren visualizar alguna informacion importante.
 
 <p align="center">
-    <img src="./imagenes/publicacion.png">
+    <img src="./Backend/Documentacion/imagenes/publicacion.png">
 </p>
 
 ---
@@ -90,7 +90,7 @@
 * En el apartado del Administrador podremos decidir que libros aceptar y rechazar luego el estudiante podra visualizar los libros aceptados.
 
 <p align="center">
-    <img src="./imagenes/aceptar.png">
+    <img src="./Backend/Documentacion/imagenes/aceptar.png">
 </p>
 
 ---
